@@ -8,15 +8,10 @@
 */
 
 $items = ["Home", "About", "Contact"];
-
+include 'header.php';
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My PHP Page</title>
-</head>
-<body>
+
 
 <h1>Welcome</h1>
 
@@ -26,9 +21,6 @@ $items = ["Home", "About", "Contact"];
 <?php endforeach; ?>
 </ul>
 
-<footer>
-    <p>&copy; 2026</p>
-</footer>
 
-</body>
-</html>
+<?php
+include 'footer.php';
