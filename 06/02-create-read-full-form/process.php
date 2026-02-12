@@ -150,7 +150,7 @@ $stmt = $pdo->prepare($sql);
 
 // Build “clean” values for each DB column using defaults.
 // We pull from $itemsOrdered so only validated quantities get used.
-$chaosCroissant = $itemsOrdered['chaos_croissant']; 
+$chaosCroissant = $itemsOrdered['chaos_croissant'] ?? 0; 
 $existentialEclair     = $itemsOrdered['existential_eclair'] ?? 0;
 $procrastinationCookie = $itemsOrdered['procrastination_cookie'] ?? 0;
 
