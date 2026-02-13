@@ -14,6 +14,7 @@ $phone     = filter_input(
     FILTER_SANITIZE_SPECIAL_CHARS
 );
 $comments = filter_input(INPUT_POST, 'comments', FILTER_SANITIZE_SPECIAL_CHARS);
+$items = $_POST['items'] ?? [];
 
 //STEP TWO - validation time - serverside 
 
@@ -48,8 +49,20 @@ if ($phone === null || $phone === '') {
 if ($address === null || $address === '') {
     $errors[] = "Address is required.";
 }
+$itemsOrdered = [];
+//check that the order quantity is a number 
+
+foreach ($items as $item => $quantity) {
+    if (filter_var($quantity, FILTER_VALIDATE_INT) !== false && $quantity > 0) {
+        $itemsOrdered[$item] = $quantity;
+    }
+}
+if (count($itemsOrdered) === 0) {
+    $errors[] = "Please order at least one item";
+}
 
 //loop through error messages 
+
 //if there are errors, display to user and exit the script 
 if (!empty($errors)) {
     foreach ($errors as $error) : ?>
@@ -59,33 +72,38 @@ if (!empty($errors)) {
     exit;
 }
 
-/* INSERT THE ORDER USING A PREPARED STATEMENT*/
+/* 
+STEP THREE - Prepare Data for the DB 
+*/
+
+// Start with all quantities at 0
+
+// Overwrite with actual ordered quantities (only allowed keys)
+
+/* 
+STEP FOUR - INSERT THE ORDER USING A PREPARED STATEMENT
+*/
 
 //set up the query used named placeholders
-$sql = "INSERT INTO orders (first_name,last_name, phone, address, email, comments) VALUES (:first_name, :last_name, :phone, :address, :email, :comments)"; 
 
 //prepare the query 
-$stmt = $pdo->prepare($sql); 
 
-//bind parameters
-$stmt->bindParam(':first_name', $firstName); 
-$stmt->bindParam(':last_name', $lastName); 
-$stmt->bindParam(':phone', $phone); 
-$stmt->bindParam(':address', $address); 
-$stmt->bindParam(':email', $email); 
-$stmt->bindParam(':comments', $comments); 
 
 //execute the query, matching the placeholder with the data entered by user
-$stmt->execute(); 
-
-//close connection 
-$pdo = null; 
 
 ?>
 
 <main>
     <!-- echo the data the user submitted -->
     <?php echo "<h2> Thanks for your order " . $firstName . "</h2>"; ?>
+
+    <h3> Items Ordered </h3>
+    <ul>
+        <!-- use for each loop to loop through array and display quantities -->
+        <?php foreach ($items as $item => $quantity): ?>
+            <li><?php echo $item ?> - <?php echo $quantity ?> </li>
+        <?php endforeach; ?>
+    </ul>
 </main>
 
 <?php require "includes/footer.php"; ?>
