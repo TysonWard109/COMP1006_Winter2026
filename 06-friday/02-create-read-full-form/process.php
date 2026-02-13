@@ -109,8 +109,9 @@ if (!empty($errors)) {
 // --------------------------------------------------
 // NOTE: We insert ALL item columns every time.
 // If an item was not ordered, we store 0 for that column.
+$sql = "INSERT INTO orders1 (first_name, last_name, email, phone, address, comments, chaos_croissant, existential_eclair, procrastination_cookie) VALUES(:first_name, :last_name, :email, :phone, :address, :comments, :chaos_croissant, :existential_eclair, :procrastination_cookie)";
 
-
+$stmt = $pdo->prepare($sql);
 
 // --------------------------------------------------
 // 5. Bind parameters
@@ -149,8 +150,12 @@ $stmt->bindParam(':procrastination_cookie', $procrastinationCookie, PDO::PARAM_I
 // --------------------------------------------------
 // 6. Execute
 // --------------------------------------------------
+$stmt ->execute();
 
 
+//Close the connection
+
+$pdo = null;
 // --------------------------------------------------
 // 7. Confirmation output
 // --------------------------------------------------
