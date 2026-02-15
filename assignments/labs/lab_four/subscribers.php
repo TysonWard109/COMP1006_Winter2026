@@ -11,7 +11,16 @@ require "includes/connect.php";
   5. Fetch all results into $subscribers
 */
 
-$subscribers = []; // placeholder
+//This is my select statmement to get all subscribers with an order by descending
+$sql = "SELECT * FROM subscribers ORDER BY subscribed_at DESC";
+//Prepare statment
+$stmt = $pdo -> prepare($sql);
+//Execute statment
+$stmt -> execute();
+//Fetch all results into $subscribers
+$subscribers = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+
+// $subscribers = []; // placeholder
 ?>
 
 <main class="container mt-4">
@@ -32,6 +41,15 @@ $subscribers = []; // placeholder
       </thead>
       <tbody>
         <!-- TODO: Loop through $subscribers and output each row -->
+         <?php foreach ($subscribers as $subscriber): ?>
+          <tr>
+            <td><?= $subscriber['id']  ?></td>
+            <td><?= $subscriber['first_name']  ?></td>
+            <td><?= $subscriber['last_name']  ?></td>
+            <td><?= $subscriber['email']  ?></td>
+            <td><?= $subscriber['subscribed_at']  ?></td>
+          </tr>
+          <?php endforeach; ?>
       </tbody>
     </table>
   <?php endif; ?>
