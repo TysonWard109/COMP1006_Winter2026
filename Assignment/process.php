@@ -1,6 +1,8 @@
 <?php
 require "includes/connect.php"; // connection to database
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 //Checks if form was submitted via post, if not show an error message and stop the script from running
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
