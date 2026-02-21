@@ -2,7 +2,7 @@
 declare(strict_types=1);
 //Database connection settings 
 $host = "localhost";
-$db = "time_tracker";
+$db = "Time_Tracker";
 $user = "root";
 $password = "";
 

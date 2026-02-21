@@ -76,7 +76,8 @@ if(!$task){
     <?php if (!empty($error)): ?>
         <p class="text-danger"><?= htmlspecialchars($error);?> </p>
     <?php endif; ?>
-
+    
+    <!-- Form pre-filled with existing data -->
     <form method = "post">
         
         <label class = "form-label"> Task Name</label>
@@ -101,9 +102,9 @@ if(!$task){
         <label class = "form-label"> Time Spent(hours)</label>
         <input type="number" step="0.1" min="0" name="time_spent" class="form-control mb-4" value="<?= (float)$task['time_spent']; ?>">
 
-        <button class= "btn btn-primary"Save Changes</button>
-        <a href ="index.php" class ="btn btn-secondary"> Cancel</a>
-        
+        <button class= "btn btn-primary" type="submit">Save Changes</button>
+        <a href ="index.php" class ="btn btn-secondary" type= "submit"> Cancel</a>
+
     </form>
 </main>
 

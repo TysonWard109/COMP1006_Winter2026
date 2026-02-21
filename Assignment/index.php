@@ -42,6 +42,9 @@
              class="form-control" step="0.25" min="0" required>
     </div>
 
+    <div class="mb-3">
+    <div class="g-recaptcha" data-sitekey="6LfMwnIsAAAAAP5nSe1UTYiIT-w50F9BKwh8Q7DR"></div>
+    </div>
     <button type="submit" class="btn btn-primary">Add Task</button>
 
   </form>
@@ -56,7 +59,7 @@
     $stmt = $pdo->query($sql);
     $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   ?>
-
+  <!-- table to display the tasks -->
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -70,6 +73,7 @@
     </thead>
 
     <tbody>
+      <!-- foreach loop to display the tasks in the table  -->
       <?php foreach ($tasks as $task): ?>
         <tr>
           <td><?= htmlspecialchars($task['task_name']); ?></td>
@@ -78,6 +82,7 @@
           <td><?= htmlspecialchars($task['due_date']); ?></td>
           <td><?= htmlspecialchars($task['time_spent']); ?></td>
           <td>
+            <!-- Buttons to edit and delete the task -->
             <a href="update.php?id=<?= $task['id']; ?>">Edit</a> |
             <a href="delete.php?id=<?= $task['id']; ?>">Delete</a>
           </td>

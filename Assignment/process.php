@@ -9,6 +9,25 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     die("Invalid request");
 }
 
+// Validate reCAPTCHA
+$recaptchaSecret = "6LfMwnIsAAAAABiivprQ0QUzxbdeYPs27qTd8jpg";
+$recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
+
+if (empty($recaptchaResponse)) {
+    die("Please complete the reCAPTCHA.");
+}
+
+$verify = file_get_contents(
+    "https://www.google.com/recaptcha/api/siteverify?secret=$recaptchaSecret&response=$recaptchaResponse"
+);
+
+$responseData = json_decode($verify);
+
+if (!$responseData->success) {
+    die("reCAPTCHA verification failed.");
+}
+
+
 //Sanitize user input using filer_input and trim to remove whitespace
 $task_name = trim(filter_input(INPUT_POST, 'task_name', FILTER_SANITIZE_SPECIAL_CHARS));
 $category = trim(filter_input(INPUT_POST, 'category',
@@ -71,9 +90,9 @@ require "includes/header.php";
 ?>
 <div class= "alert alert-success">
     <h2> Task Added Succesfully! </h2>
-    <p> Task "<strong> <?=  htmlspecialchars ($task_name)?></strong> has been added under category<strong> <?= htmlspecialchars ($category)?> </strong> with priority <strong><?= htmlspecialchars ($priority)?> </strong> and is due on <strong><?= htmlspecialchars ($due_date)?> </strong>. You have spent <strong><?= htmlspecialchars ($time_spent)?> </strong> hours on this task. </p>
-    <a href="index.php" class="btn btn-primary">Back to Task List</
+    <p> Task <strong> <?=  htmlspecialchars ($task_name)?></strong> has been added under category<strong> <?= htmlspecialchars ($category)?> </strong> with priority <strong><?= htmlspecialchars ($priority)?> </strong> and is due on <strong><?= htmlspecialchars ($due_date)?> </strong>. You have spent <strong><?= htmlspecialchars ($time_spent)?> </strong> hours on this task. </p>
+    <a href="index.php" class="btn btn-primary" type="submit">Back to Task List</
 </div>
 <?php
-require "includes/footer.php";
+// require "includes/footer.php";
 ?>
