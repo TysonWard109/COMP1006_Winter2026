@@ -3,6 +3,7 @@ require "includes/header.php";
 require "includes/connect.php"; // connect to db 
 
 //create query 
+<<<<<<< HEAD:06-friday/02-create-read-full-form/orders.php
 $sql = "SELECT * FROM orders1 ORDER BY created_at DESC";
 
 //prepare
@@ -11,6 +12,18 @@ $stmt = $pdo ->prepare($sql);
 $stmt -> execute();
 //retrieve all rows returned by a SQL query at once
 $orders = $stmt -> fetchALL();
+=======
+$sql = "SELECT * FROM orders1 ORDER BY created_at DESC"; 
+
+//prepare
+$stmt = $pdo->prepare($sql);  
+
+//execute 
+$stmt->execute(); 
+
+//retrieve all rows returned by a SQL query at once
+$orders = $stmt->fetchAll(); 
+>>>>>>> f18205ce1060b62527b55432e7ff5b0df752dc1d:06/02-create-read-full-form/orders.php
 ?>
 
 <main class="mt-4">
@@ -24,7 +37,11 @@ $orders = $stmt -> fetchALL();
 
         <?php
           // Calculate total items
+<<<<<<< HEAD:06-friday/02-create-read-full-form/orders.php
           $total = $order['chaos_croissant'] + $order ['existential_eclair'] + $order ['procrastination_cookie'];
+=======
+          $total = $order['chaos_croissant'] + $order['existential_eclair'] + $order['procrastination_cookie']
+>>>>>>> f18205ce1060b62527b55432e7ff5b0df752dc1d:06/02-create-read-full-form/orders.php
         
         ?>
 
