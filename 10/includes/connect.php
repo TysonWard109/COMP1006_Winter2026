@@ -1,6 +1,6 @@
 <?php 
 $host = "localhost"; //hostname
-$db = "bitumi"; //database name
+$db = "bitymk"; //database name
 $user = "root"; //username
 $password = ""; //password
 
