@@ -1,5 +1,16 @@
 <?php require "includes/header.php"; ?>
 <?php require "includes/connect.php"; ?>
+<?php require "includes/auth.php"; 
+
+$user_id = $_SESSION['user_id'];
+
+//Fetch only the tasks that belong to the logged in user
+$sql = "SELECT * FROM tasks WHERE user_id = :user_id ORDER BY due_date ASC";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+$tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 
 <main>
   <h2 class="mb-4">Time Tracker</h2>
