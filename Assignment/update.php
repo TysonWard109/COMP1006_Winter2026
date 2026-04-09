@@ -4,6 +4,7 @@
 
 require "includes/header.php";
 require "includes/connect.php";
+require "includes/auth.php"; // checks if user is logged in, if not redirects to login page
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);

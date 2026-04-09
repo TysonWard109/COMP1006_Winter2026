@@ -1,6 +1,7 @@
 <?php 
 
 require "includes/connect.php";
+require "includes/auth.php"; // checks if user is logged in, if not redirects to login page
 
 //Make sure we get an ID
 

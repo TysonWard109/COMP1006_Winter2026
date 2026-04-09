@@ -52,6 +52,12 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <input type="number" id="time_spent" name="time_spent"
              class="form-control" step="0.25" min="0" required>
     </div>
+    <!-- File Upload! -->
+     <div class ="mb-3">
+        <label for="task_image" class="form-label">Task Image (optional)</label>
+        <input type="file" id="task_image" name="task_image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
+     </div>
+
 
     <div class="mb-3">
     <div class="g-recaptcha" data-sitekey="6LfMwnIsAAAAAP5nSe1UTYiIT-w50F9BKwh8Q7DR"></div>
@@ -74,6 +80,7 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <table class="table table-bordered">
     <thead>
       <tr>
+        <th>Image</th>
         <th>Task</th>
         <th>Category</th>
         <th>Priority</th>
@@ -87,6 +94,14 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <!-- foreach loop to display the tasks in the table  -->
       <?php foreach ($tasks as $task): ?>
         <tr>
+          <td>
+            <?php if(!empty($task['image_path'])): ?>
+              <img src ="<?= htmlspecialchars($task['image_path']);?>" 
+                    alt="Task Image" width="60" height="60">
+            <?php else: ?>
+              <span>No Image</span>
+            <?php endif; ?>
+          </td>
           <td><?= htmlspecialchars($task['task_name']); ?></td>
           <td><?= htmlspecialchars($task['category']); ?></td>
           <td><?= htmlspecialchars($task['priority']); ?></td>

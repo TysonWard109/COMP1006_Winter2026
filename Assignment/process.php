@@ -1,5 +1,6 @@
 <?php
 require "includes/connect.php"; // connection to database
+require "includes/auth.php"; // checks if user is logged in, if not redirects to login page
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -36,6 +37,34 @@ $priority = trim(filter_input(INPUT_POST, 'priority', FILTER_SANITIZE_SPECIAL_CH
 $due_date = $_POST['due_date'];
 $time_spent = filter_input(INPUT_POST, 'time_spent', FILTER_VALIDATE_FLOAT);
 
+//Image upload handling
+$imagePath = null;
+if (isset($_FILES['task_image']) && $_FILES['task_image']['error'] !==UPLOAD_ERR_NO_FILE) {
+    if ($_FILES['task_image']['error'] === UPLOAD_ERR_OK){
+        $errors[] = "Error uploading file.";
+    } else{
+
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+        $detectedType = mime_content_type($_FILES['task_image']['tmp_name']);
+
+        if (!in_array($detectedType, $allowedTypes)){
+            $errors[] = "Invalid file type. Only JPG, PNG and WEBP are allowed.";
+        } else {
+            $extesion = pathinfo($_FILES['task_image']['name'], PATHINFO_EXTENSION);
+            $safeFilename = uniqid('task_', true) . '.' . strtolower($extension);
+            $destination = __DIR__ . '/uploads/' . $safeFilename;
+
+            if (move_uploaded_file($_FILES['task_image']['tmp_name'], $destination)) {
+                $imagePath = 'uploads/' . $safeFilename;
+            } else {
+                $errors[] = "Failed to move uploaded file.";
+            }
+        }
+    }
+}
+
+
 //Server side validation
 $errors = [];
 
@@ -71,7 +100,7 @@ if (!empty($errors)) {
 }
 
 //Prearing the sql statement with placeholders to prevent sql injection
-$sql = "INSERT INTO tasks (task_name, category, priority, due_date, time_spent) VALUES (:task_name, :category, :priority, :due_date, :time_spent)";
+$sql = "INSERT INTO tasks (task_name, category, priority, due_date, time_spent, image_path) VALUES (:task_name, :category, :priority, :due_date, :time_spent, :image_path)";
 
 $stmt =$pdo ->prepare ($sql);
 
@@ -81,6 +110,7 @@ $stmt->bindParam (':category' , $category);
 $stmt->bindParam (':priority' , $priority);
 $stmt->bindParam (':due_date' , $due_date);
 $stmt->bindParam (':time_spent' , $time_spent);
+$stmt->bindParam (':image_path' , $imagePath);
 
 //Execute the statement to insert the data into the database
 $stmt -> execute();
@@ -91,7 +121,14 @@ require "includes/header.php";
 <div class= "alert alert-success">
     <h2> Task Added Succesfully! </h2>
     <p> Task <strong> <?=  htmlspecialchars ($task_name)?></strong> has been added under category<strong> <?= htmlspecialchars ($category)?> </strong> with priority <strong><?= htmlspecialchars ($priority)?> </strong> and is due on <strong><?= htmlspecialchars ($due_date)?> </strong>. You have spent <strong><?= htmlspecialchars ($time_spent)?> </strong> hours on this task. </p>
-    <a href="index.php" class="btn btn-primary" type="submit">Back to Task List</
+
+
+    // If an image is uploaded show a message about the image being uploaded succesfully
+    <?php if ($imagePath): ?>
+        <p> An image was uploaded for this task. </p>
+        <img src="<?= htmlspecialchars($imagePath); ?>" alt="Task Image" width="100" height="100">
+    <?php endif; ?>
+    <a href="index.php" class="btn btn-primary" type="submit">Back to Task List</a>
 </div>
 <?php
 // require "includes/footer.php";
