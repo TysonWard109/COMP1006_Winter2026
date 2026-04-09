@@ -9,6 +9,51 @@
 // 3. convert JSON into a PHP array
 // 4. display the returned joke on the page
 
+//First thing is to create a variable to store the dad joke after we call the api
+
+$joke ="";
+
+//make sure the form was submitted 
+if (isset($_POST['get_joke'])) {
+    //use headers to tell the API we want JSON returned
+    $options = [
+        "http" => [
+            "method" => "GET",
+            "header" => "Accept:application/json\r\n" .
+                "User-Agent: COMP1006 Dad Joke Demo (http://localhost)\r\n"
+        ]
+    ];
+
+    //convert the options array into a stream context 
+    $context = stream_context_create($options);
+
+    //send the request to the random joke endpoint 
+    $response = file_get_contents('https://icanhazdadjoke.com/', false, $context);
+
+    if ($response !== false) {
+        //let's see what is returned 
+        //var_dump($response); 
+
+        //convert the JSON response into a PHP associative array 
+        $data = json_decode($response, true);
+
+        //let's see what we are working with now
+        //r_dump($data); 
+
+        $joke = $data['joke'];
+        
+    } else {
+        $joke = "Sorry, no Dad jokes today :(";
+    }
+}
+
+
+
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
