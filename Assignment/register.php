@@ -1,6 +1,5 @@
 <?php 
-require "includes/header.php";
-require "includes/auth.php";
+require "includes/connect.php";
 
 $errors = [];
 
@@ -38,7 +37,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $sql ="SELECT id FROM users WHERE username = :username OR email = :email";
         $stmt = $pdo ->prepare($sql);
         $stmt ->execute(['username' => $username, 'email' => $email]);
-    }
+    
     if($stmt ->fetch()){
         $errors[] = "Username or email already exists.";
     }
@@ -53,12 +52,14 @@ if(empty($errors)){
     $stmt ->execute(['username' => $username, 'email' => $email, 'password' => $hashedPassword]);
 
     //Auto login the user
-    session_start();
     $_SESSION['user_id'] = $pdo ->lastInsertId();
     $_SESSION['username'] = $username;
     header('Location: index.php');
     exit();
 }
+}
+require "includes/header.php";
+
 ?>
 
 <body>

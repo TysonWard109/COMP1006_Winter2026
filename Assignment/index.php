@@ -1,11 +1,15 @@
-<?php require "includes/header.php"; ?>
-<?php require "includes/connect.php"; ?>
-<?php require "includes/auth.php"; 
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ require "includes/connect.php"; 
+ require "includes/auth.php"; 
+ $user_id = $_SESSION['user_id'];
 
-$user_id = $_SESSION['user_id'];
+ require "includes/header.php"; ?>
 
-//Fetch only the tasks that belong to the logged in user
-$sql = "SELECT * FROM tasks WHERE user_id = :user_id ORDER BY due_date ASC";
+<!-- //Fetch only the tasks that belong to the logged in user -->
+<?php $sql = "SELECT * FROM tasks WHERE user_id = :user_id ORDER BY due_date ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
@@ -16,7 +20,7 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <h2 class="mb-4">Time Tracker</h2>
 
   <!-- Add Task Form -->
-  <form action="process.php" method="post">
+  <form action="process.php" method="post" enctype="multipart/form-data">
 
     <div class="mb-3">
       <label for="task_name" class="form-label">Task Name</label>
@@ -72,8 +76,10 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <h3>All Tasks</h3>
 
   <?php
-    $sql = "SELECT * FROM tasks ORDER BY due_date ASC";
-    $stmt = $pdo->query($sql);
+    $sql = "SELECT * FROM tasks WHERE user_id = :user_id ORDER BY due_date ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
     $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   ?>
   <!-- table to display the tasks -->

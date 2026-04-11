@@ -1,3 +1,7 @@
+<?php 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}?>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -10,10 +14,32 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class = "container">
-            <a class="navbar-brand" href="index.php"> Time Tracker</a>
-            <div>
-                <a href = "index.php" class = "btn btn-success"> Add Task</a>
+        <div class="container">
+        <a class="navbar-brand" href="index.php">
+            Time Tracker
+        </a>
+            <div class="d-flex gap-2">
+            <!-- Always visible -->
+            <a href="index.php" class="btn btn-success">
+                Add Task
+            </a>
+            <?php if (!empty($_SESSION['user_id'])): ?>
+                <!-- LOGGED IN STATE -->
+                <span class="navbar-text text-white me-2">
+                    👤 <?= htmlspecialchars($_SESSION['username']); ?>
+                </span>
+                <a href="logout.php" class="btn btn-danger">
+                    Logout
+                </a>
+            <?php else: ?>
+                <!-- LOGGED OUT STATE -->
+                <a href="login.php" class="btn btn-primary">
+                    Login
+                </a>
+                <a href="register.php" class="btn btn-outline-light">
+                    Register
+                </a>
+            <?php endif; ?>
             </div>
         </div>
     </nav>

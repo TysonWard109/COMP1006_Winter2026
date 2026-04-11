@@ -1,9 +1,15 @@
 <?php
-require "includes/connect.php"; // connection to database
 require "includes/auth.php"; // checks if user is logged in, if not redirects to login page
+
+$user_id = $_SESSION['user_id'];
+
+require "includes/connect.php"; // connection to database
+
+require "includes/header.php"; // header file with bootstrap and navigation
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 
 //Checks if form was submitted via post, if not show an error message and stop the script from running
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -38,9 +44,12 @@ $due_date = $_POST['due_date'];
 $time_spent = filter_input(INPUT_POST, 'time_spent', FILTER_VALIDATE_FLOAT);
 
 //Image upload handling
+$errors = [];
+
+
 $imagePath = null;
 if (isset($_FILES['task_image']) && $_FILES['task_image']['error'] !==UPLOAD_ERR_NO_FILE) {
-    if ($_FILES['task_image']['error'] === UPLOAD_ERR_OK){
+    if ($_FILES['task_image']['error'] !== UPLOAD_ERR_OK){
         $errors[] = "Error uploading file.";
     } else{
 
@@ -51,7 +60,7 @@ if (isset($_FILES['task_image']) && $_FILES['task_image']['error'] !==UPLOAD_ERR
         if (!in_array($detectedType, $allowedTypes)){
             $errors[] = "Invalid file type. Only JPG, PNG and WEBP are allowed.";
         } else {
-            $extesion = pathinfo($_FILES['task_image']['name'], PATHINFO_EXTENSION);
+            $extension = pathinfo($_FILES['task_image']['name'], PATHINFO_EXTENSION);
             $safeFilename = uniqid('task_', true) . '.' . strtolower($extension);
             $destination = __DIR__ . '/uploads/' . $safeFilename;
 
@@ -66,7 +75,6 @@ if (isset($_FILES['task_image']) && $_FILES['task_image']['error'] !==UPLOAD_ERR
 
 
 //Server side validation
-$errors = [];
 
 if ($task_name === null || $task_name === '' ) {
     $errors[] = "Task Name is required.";
@@ -124,8 +132,8 @@ require "includes/header.php";
     <p> Task <strong> <?=  htmlspecialchars ($task_name)?></strong> has been added under category<strong> <?= htmlspecialchars ($category)?> </strong> with priority <strong><?= htmlspecialchars ($priority)?> </strong> and is due on <strong><?= htmlspecialchars ($due_date)?> </strong>. You have spent <strong><?= htmlspecialchars ($time_spent)?> </strong> hours on this task. </p>
 
 
-    // If an image is uploaded show a message about the image being uploaded succesfully
-    <?php if ($imagePath): ?>
+    
+    <?php if ($imagePath): // If an image is uploaded show a message about the image being uploaded succesfully?>
         <p> An image was uploaded for this task. </p>
         <img src="<?= htmlspecialchars($imagePath); ?>" alt="Task Image" width="100" height="100">
     <?php endif; ?>

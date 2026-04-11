@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 //Database connection settings 
-$host = "localhost";
-$db = "Time_Tracker";
-$user = "root";
+$host = "172.31.22.43";
+$db = "Tyson200287209";
+$user = "Tyson200287209";
 $password = "";
 
 $dsn = "mysql:host=$host;dbname=$db";

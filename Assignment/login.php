@@ -1,8 +1,10 @@
 <?php 
-require "includes/header.php";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+session_start();
 require "includes/connect.php";
 
-session_start();
 
 $errors = [];
 
@@ -42,6 +44,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
     }
     }
+    require "includes/header.php";
+
     ?>
  <main class = "container mt-4">
     <h2>Login</h2>

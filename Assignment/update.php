@@ -2,9 +2,11 @@
 
 //Admin update page for tasks
 
-require "includes/header.php";
+
 require "includes/connect.php";
 require "includes/auth.php"; // checks if user is logged in, if not redirects to login page
+
+$user_id = $_SESSION['user_id'];
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -37,7 +39,7 @@ if($_SERVER['REQUEST_METHOD'] ==='POST'){
         priority = :priority,
         due_date = :due_date,
         time_spent = :time_spent
-        WHERE id = :id";
+        WHERE id = :id AND user_id = :user_id";
         
         $stmt = $pdo ->prepare($sql);
 
@@ -59,9 +61,10 @@ if($_SERVER['REQUEST_METHOD'] ==='POST'){
 
 //Load existing task data
 
-$sql = "SELECT * FROM tasks WHERE id = :id";
+$sql = "SELECT * FROM tasks WHERE id = :id AND user_id = :user_id";
 $stmt = $pdo-> prepare($sql);
 $stmt -> bindParam (':id', $taskId);
+$stmt -> bindParam (':user_id', $user_id);
 $stmt ->execute();
 
 $task = $stmt ->fetch();
@@ -69,6 +72,8 @@ $task = $stmt ->fetch();
 if(!$task){
     die("Task not found.");
 }
+require "includes/header.php";
+
 ?>
 
 <main class = "container mt-4">

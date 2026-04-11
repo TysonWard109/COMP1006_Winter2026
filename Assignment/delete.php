@@ -12,10 +12,11 @@ if(!isset($_GET['id'])){
 $taskId = $_GET['id'];
 
 //Delete the row 
-$sql = "DELETE FROM tasks WHERE id = :id";
+$sql = "DELETE FROM tasks WHERE id = :id AND user_id = :user_id";
 $stmt = $pdo->prepare($sql);
 
 $stmt->bindParam(':id', $taskId);
+$stmt->bindParam(':user_id', $_SESSION['user_id']);
 
 $stmt-> execute();
 
