@@ -100,11 +100,12 @@ if (!empty($errors)) {
 }
 
 //Prearing the sql statement with placeholders to prevent sql injection
-$sql = "INSERT INTO tasks (task_name, category, priority, due_date, time_spent, image_path) VALUES (:task_name, :category, :priority, :due_date, :time_spent, :image_path)";
+$sql = "INSERT INTO tasks (user_id, task_name, category, priority, due_date, time_spent, image_path) VALUES (:user_id, :task_name, :category, :priority, :due_date, :time_spent, :image_path)";
 
 $stmt =$pdo ->prepare ($sql);
 
 //Bind the user input to the placeholders in the sql statement
+$stmt->bindParam (':user_id', $user_id);
 $stmt->bindParam (':task_name' , $task_name);
 $stmt->bindParam (':category' , $category);
 $stmt->bindParam (':priority' , $priority);
