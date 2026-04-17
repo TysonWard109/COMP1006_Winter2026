@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
     
 <head>
     <meta charset="UTF-8">
-    <title>Time Tracker</title>
+    <title>Gallery App</title>
     <meta name = "viewport" content = "width=device-width, initial-scale=1">
     <!-- Bootstrap CSS  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,7 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
         <a class="navbar-brand" href="index.php">
-            Time Tracker
+            Gallery app
         </a>
             <div class="d-flex gap-2">
             <!-- Always visible -->
