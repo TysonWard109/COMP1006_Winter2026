@@ -40,7 +40,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] !==UPLOAD_ERR_NO_FILE) 
             $errors[] = "Invalid file type. Only JPG, PNG and WEBP are allowed.";
         } else {
             $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-            $safeFilename = uniqid('task_', true) . '.' . strtolower($extension);
+            $safeFilename = uniqid('image', true) . '.' . strtolower($extension);
             $destination = __DIR__ . '/uploads/' . $safeFilename;
 
             if (move_uploaded_file($_FILES['image']['tmp_name'], $destination)) {
@@ -58,9 +58,9 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] !==UPLOAD_ERR_NO_FILE) 
 if ($title === null || $title === '' ) {
     $errors[] = "Title is required.";
 }
-if ($imagePath === null) {
-    $errors[] = "Image is required.";
-}
+// if ($imagePath === null) {
+//     $errors[] = "Image is required.";
+// }
 
 // If there are any errors display them and stop the script
 if (!empty($errors)) { 
@@ -78,13 +78,15 @@ if (!empty($errors)) {
 }
 
 //Prearing the sql statement with placeholders to prevent sql injection
-$sql = "INSERT INTO tasks (title, image_path) VALUES (:title, :image_path)";
+$sql = "INSERT INTO images (name, title, image_path, user_id) VALUES (:name, :title, :image_path, :user_id)";
 
 $stmt =$pdo ->prepare ($sql);
 
 //Bind the user input to the placeholders in the sql statement
+$stmt->bindParam (':name', $title);
 $stmt->bindParam (':title', $title);
 $stmt->bindParam (':image_path' , $imagePath);
+$stmt->bindParam (':user_id', $user_id);
 
 //Execute the statement to insert the data into the database
 $stmt -> execute();
@@ -102,7 +104,7 @@ require "includes/header.php";
         <p> An image was uploaded for this task. </p>
         <img src="<?= htmlspecialchars($imagePath); ?>" alt="Task Image" width="100" height="100">
     <?php endif; ?>
-    <a href="index.php" class="btn btn-primary" type="submit">Back to Task List</a>
+    <a href="index.php" class="btn btn-primary" type="submit">Back to Image Gallery</a>
 </div>
 <?php
 // require "includes/footer.php";

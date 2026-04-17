@@ -61,7 +61,7 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <tbody>
       <!-- foreach loop to display the images in the table  -->
-      <?php foreach ($image as $image): ?>
+      <?php foreach ($tasks as $image): ?>
         <tr>
           <td>
             <?php if(!empty($image['image_path'])): ?>
@@ -76,8 +76,8 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </tbody>
     </table>
             <!-- Buttons to edit and delete the task -->
-            <a href="update.php?id=<?= $task['id']; ?>">Edit</a> |
-            <a href="delete.php?id=<?= $task['id']; ?>">Delete</a>
+
+            <a href="delete.php?id=<?= $image['id']; ?>">Delete</a>
           </td>
         </tr>
       <?php endforeach; ?>

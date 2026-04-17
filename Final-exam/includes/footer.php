@@ -1,7 +1,7 @@
 </div> <!-- end container -->
 
 <footer class="bg-light text-center mt-5 p-3">
-    <p class="mb-0">&copy; <?= date("Y"); ?> Time Tracker App</p>
+    <p class="mb-0">&copy; <?= date("Y"); ?> Image Gallery App</p>
 </footer>
 
 <!-- Bootstrap JS -->
